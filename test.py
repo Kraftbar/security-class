@@ -9,78 +9,90 @@ import myBib
 import permNyTest
 import permTesting
 from multiprocessing import Pool
+
 start = time.time()
 from pprint import pprint
 
 m = hashlib.md5()
 m.update("Nobody will care".encode('utf-8'))
-print(m.hexdigest())
+# print(m.hexdigest())
 
-sizeof_list=20
+sizeof_list = 700
 
 rand_pass = list()
 
-masterlist=[]*sizeof_list
+masterlist = [] * sizeof_list
 
-teller=0
-
-
+counter = 0
 
 # Generating random strings.
-#  "SERVER SIDE"
+#  "Passwordlist of server"
 # Setting them into the list
-while teller<sizeof_list:
-    teller=teller+1
-    rand_pass=list()
+while counter < sizeof_list:
+    counter = counter + 1
+    rand_pass = list()
     masterlist.append(rand_pass)
-    for j in range(teller):
-        a = [random.randint(65, 67), random.randint(65, 67), random.randint(65, 67)]
-        b = chr(a[0]) + chr(a[1]) + chr(a[2])
-        word=myBib.randomString(3,3)
+    for j in range(counter):
+        word = myBib.randomString(3, 3)
         rand_pass.append(word)
 
-pprint(masterlist)
+endListe = time.time()
 
-print(type(m))
 rand_pass_hashed = list()
 
 
-
+# Generating all the hashes
+#   "of the passwordlist"
 #
-for i in range(sizeof_list):
-    m.update(rand_pass[i].encode('utf-8'))  # can move .encode('utf-8') to the rand_pass[i]=b line
-    rand_pass_hashed.append(m.hexdigest())
+##     RUNNES TROUGH THE WHOLE MASTER LIST
+#
 
+
+hashCollection={}
+for subArray in (masterlist):
+    for randWord in (subArray):
+       m.update(randWord.encode('utf-8'))
+       rand_pass_hashed.append(m.hexdigest()) # Random line for the display
+       hashCollection[randWord] =  m.hexdigest();
+
+       ## SJEKKE
+        ## CONatins eller noe
+
+
+## Attack using dictonary
+print(hashCollection)
+
+## Attack using arrylist
+# print(rand_pass_hashed)
+
+
+
+
+endHash = time.time()
+##
+# Display -- Random for the display
+###
 newList = [rand_pass, rand_pass_hashed]
-
-
-end = time.time()
-
-# Display
 print("		Hased to MD5")
 lineText = "-------------------------------------------------"
 print(lineText)
-for i in range(sizeof_list):
+for i in range(3):
     print("|   " + rand_pass[i] + " --> " + rand_pass_hashed[i] + "    |")
 print(lineText)
 
-print("Time elapced:"+str(end - start)+"\n\n")
-
-
 print("		Permuations:")
 print(lineText)
-print("|   ",end='')
-permutat=itertools.product(range(3), repeat=3)
-counter=0
+print("|   ", end='')
+permutat = itertools.product(range(3), repeat=3)
+counter = 0
 for line in permutat:
-    counter=counter+1
-    print("   " +  chr(65 + line[0]) + chr(65 + line[1]) + chr(65 + line[2])+"  ", end='')
-    if(0==(counter%5)):
+    counter = counter + 1
+    print("   " + chr(65 + line[0]) + chr(65 + line[1]) + chr(65 + line[2]) + "  ", end='')
+    if (0 == (counter % 5)):
         print("    |")
-        print("|   ",end='')
+        print("|   ", end='')
 print()
 print(lineText)
 
-
-
-
+print("Time elapced liste :" + str(endListe - start) + "\n\n")
+print("Time elapced hash:" + str(endHash - endListe) + "\n\n")

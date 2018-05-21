@@ -8,3 +8,5 @@ def randomString(kombinasjoner,lengde):
         retur.append(chr(random.randint(97, b)))
 
     return ''.join(retur)
+
+
