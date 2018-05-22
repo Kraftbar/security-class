@@ -16,18 +16,18 @@ from pprint import pprint
 
 
 
-
-
 m = hashlib.md5()
 m.update("Nobody will care".encode('utf-8'))
-# print(m.hexdigest())
+print(m.hexdigest())
 
 sizeof_list = 3
 
 rand_pass = list()
+rand_passHashed=list()
+
 
 masterlist = [] * sizeof_list
-
+masterlistHashed=[]*sizeof_list
 counter = 0
 
 # Generating random strings.
@@ -36,10 +36,20 @@ counter = 0
 while counter < sizeof_list:
     counter = counter + 1
     rand_pass = list()
-    masterlist.append(rand_pass)
+    rand_passHashed = list()
     for j in range(counter):
         word = myBib.randomString(3, 3)
+        wordHashed=hashlib.md5(word.encode('utf-8')).hexdigest()
+
         rand_pass.append(word)
+        rand_passHashed.append(wordHashed)
+
+    masterlistHashed.append(rand_passHashed)
+    masterlist.append(rand_pass)
+
+
+pprint(masterlist)
+pprint(masterlistHashed)
 
 endListe = time.time()
 
@@ -52,24 +62,57 @@ rand_pass_hashed = list()
 ##     RUNNES TROUGH THE WHOLE MASTER LIST
 #
 
-### Calculating the perms before
-permutat = itertools.product(range(3), repeat=3)
+### Calculating the perms before)
 
-print(permutat)
 
+counter = 0
+
+
+
+
+parmutations=myBib.findPerms(3,3)
+
+
+tries=0
 hashedStr=""
 complBroken=0
-for passwordList in masterlist:
+found=0
+hashesFound=0
+
+counter=0
+print(parmutations)
+for passwordList in masterlistHashed:
+
     hashCollection = {}     # for each "file" gen a new dictionary
-    for randWord in passwordList:
-        while not complBroken:
-            complBroken=1   # test
-            m.update(randWord.encode('utf-8'))
-            hashedStr=m.hexdigest()
-            if( hashedStr in hashCollection):
+    passListLength = len(passwordList)
+    print(" NEW LIST")
+    counter=0
+    for hashedPasw in passwordList:
+        tries = 0
+        while(1): # this is spinning while i dont want it
+            print(counter)
+            ## Check if it is in the dict
+            ## else compute the hash and add it
+            if( hashedPasw in hashCollection):
                 print("found")
-            hashCollection[randWord] = hashedStr
-        complBroken = 0
+                found=1
+                hashesFound=hashesFound+1
+
+                if (found):
+                    print(str(counter) + " Tries to find " + hashedPasw + "in" + str(passListLength))
+                    break
+
+            else:
+                currentPermWord = parmutations[counter]  # out of boundes if the last perm is the correct
+                currentPermWordHased=hashlib.md5(currentPermWord.encode('utf-8')).hexdigest()
+                hashCollection[currentPermWordHased] = currentPermWord #kan hende de må bytte
+
+            counter=counter+1
+            tries=tries+1
+
+
+
+        found = 0
 
     ## SJEKKE
         ## CONatins eller noe
@@ -82,6 +125,7 @@ print(hashCollection)
 # print(rand_pass_hashed)
 
 
+permutat = itertools.product(range(3), repeat=3)
 
 
 
@@ -104,7 +148,7 @@ print(lineText)
 print("		Permuations:")
 print(lineText)
 print("|   ", end='')
-permutat = itertools.product(range(4), repeat=3)
+permutat = itertools.product(range(3), repeat=3)
 counter = 0
 for line in permutat:
     counter = counter + 1

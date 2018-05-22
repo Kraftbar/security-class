@@ -1,4 +1,6 @@
 import itertools
+from itertools import permutations
+import itertools
 import random
 
 def randomString(kombinasjoner,lengde):
@@ -11,14 +13,12 @@ def randomString(kombinasjoner,lengde):
     return ''.join(retur)
 
 
-def numbersToString(kombiansjoner, lengde):
-    kombiansjoner=kombiansjoner+96
+def findPerms(kombiansjoner, lengde):
     permutatt = itertools.product(range(kombiansjoner), repeat=lengde)
     retur = list()
     for line in permutatt:
         word=list()
         for k in line:
-             word.append(chr(k))
-        ''.join(word)
-        retur.append(word)
+             word.append(chr(k+97))
+        retur.append(''.join(word))
     return retur
