@@ -79,6 +79,8 @@ complBroken=0
 found=0
 hashesFound=0
 
+
+
 counter=0
 print(parmutations)
 for passwordList in masterlistHashed:
