@@ -13,11 +13,16 @@ from multiprocessing import Pool
 start = time.time()
 from pprint import pprint
 
+
+
+
+
+
 m = hashlib.md5()
 m.update("Nobody will care".encode('utf-8'))
 # print(m.hexdigest())
 
-sizeof_list = 700
+sizeof_list = 3
 
 rand_pass = list()
 
@@ -47,15 +52,26 @@ rand_pass_hashed = list()
 ##     RUNNES TROUGH THE WHOLE MASTER LIST
 #
 
+### Calculating the perms before
+permutat = itertools.product(range(3), repeat=3)
 
-hashCollection={}
-for subArray in (masterlist):
-    for randWord in (subArray):
-       m.update(randWord.encode('utf-8'))
-       rand_pass_hashed.append(m.hexdigest()) # Random line for the display
-       hashCollection[randWord] =  m.hexdigest();
+print(permutat)
 
-       ## SJEKKE
+hashedStr=""
+complBroken=0
+for passwordList in masterlist:
+    hashCollection = {}     # for each "file" gen a new dictionary
+    for randWord in passwordList:
+        while not complBroken:
+            complBroken=1   # test
+            m.update(randWord.encode('utf-8'))
+            hashedStr=m.hexdigest()
+            if( hashedStr in hashCollection):
+                print("found")
+            hashCollection[randWord] = hashedStr
+        complBroken = 0
+
+    ## SJEKKE
         ## CONatins eller noe
 
 
@@ -68,22 +84,27 @@ print(hashCollection)
 
 
 
+
+
 endHash = time.time()
 ##
 # Display -- Random for the display
 ###
+for i in rand_pass:
+    rand_pass_hashed.append(m.hexdigest())  # Random line for the display, nevermind this
+
 newList = [rand_pass, rand_pass_hashed]
 print("		Hased to MD5")
 lineText = "-------------------------------------------------"
 print(lineText)
-for i in range(3):
+for i in range(sizeof_list):
     print("|   " + rand_pass[i] + " --> " + rand_pass_hashed[i] + "    |")
 print(lineText)
 
 print("		Permuations:")
 print(lineText)
 print("|   ", end='')
-permutat = itertools.product(range(3), repeat=3)
+permutat = itertools.product(range(4), repeat=3)
 counter = 0
 for line in permutat:
     counter = counter + 1

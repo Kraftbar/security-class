@@ -1,3 +1,4 @@
+import itertools
 import random
 
 def randomString(kombinasjoner,lengde):
@@ -10,3 +11,14 @@ def randomString(kombinasjoner,lengde):
     return ''.join(retur)
 
 
+def numbersToString(kombiansjoner, lengde):
+    kombiansjoner=kombiansjoner+96
+    permutatt = itertools.product(range(kombiansjoner), repeat=lengde)
+    retur = list()
+    for line in permutatt:
+        word=list()
+        for k in line:
+             word.append(chr(k))
+        ''.join(word)
+        retur.append(word)
+    return retur
